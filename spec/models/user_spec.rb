@@ -63,6 +63,16 @@ describe User do
   	it { should_not be_valid }
   end
 
+  describe "email address with mixed case" do
+  	let(:mixed_case_email) { "foO@baR.cOM" }
+
+  	it "should be saved as all lowercase" do
+  		@user.email = mixed_case_email
+  		@user.save
+  		expect(@user.reload.email).to eq mixed_case_email.downcase
+  	end
+  end
+
   describe "when password is not present" do
   	before do
   		@user.password = " "
@@ -95,7 +105,7 @@ describe User do
   	describe "with invalid password" do
   		let(:user_for_invalid_password) { found_user.authenticate("invalid") }
   		it { should_not eq user_for_invalid_password }
-  		specify { expect(user_for_invalid_password).to be_fals }
+  		specify { expect(user_for_invalid_password).to be_false }
   	end
 
   end
